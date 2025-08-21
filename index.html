@@ -1,0 +1,663 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公文写作助手 - AI 智能校对</title>
+    <link rel="stylesheet" href="public/assets/css/main.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- 主布局区域 -->
+        <div class="main-layout" id="mainLayout">
+            <!-- 左侧标题区域 -->
+            <div class="left-section" id="leftSection">
+                <div class="brand">
+                    <h1>公文写作助手</h1>
+                </div>
+            </div>
+
+            <!-- 中央内容区域 -->
+            <div class="center-section">
+                <!-- 右侧箭头按钮 -->
+                <button class="arrow-btn right-arrow" id="rightArrow">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                
+                <!-- 功能选择区域 -->
+                <!-- 功能选择页面 -->
+                <div class="function-selection" id="functionSelection">
+                    <div class="selection-header">
+                        <h2>选择功能</h2>
+                    </div>
+                    
+                    <div class="function-cards">
+                        <!-- 公文生成卡片 -->
+                        <div class="function-card generation-card clickable-card" id="generationCard">
+                            <div class="card-icon">
+                                <i class="fas fa-magic"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>公文生成</h3>
+                                <ul class="feature-list">
+                                    <li><i class="fas fa-check"></i> 格式标准规范</li>
+                                    <li><i class="fas fa-check"></i> 语言准确专业</li>
+                                    <li><i class="fas fa-check"></i> 结构完整清晰</li>
+                                    <li><i class="fas fa-check"></i> 多种公文类型</li>
+                                </ul>
+                            </div>
+                            <div class="card-footer">
+                                <small class="file-hint">通知、请示、报告等</small>
+                            </div>
+                        </div>
+                        
+                        <!-- 文档润色卡片 -->
+                        <div class="function-card proofreading-card clickable-card" id="proofreadingCard">
+                            <div class="card-icon">
+                                <i class="fas fa-feather-alt"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>文档润色</h3>
+                                <ul class="feature-list">
+                                    <li><i class="fas fa-check"></i> 智能语法检查</li>
+                                    <li><i class="fas fa-check"></i> 错别字识别</li>
+                                    <li><i class="fas fa-check"></i> 表达优化建议</li>
+                                    <li><i class="fas fa-check"></i> 逐句精细润色</li>
+                                </ul>
+                            </div>
+                            <div class="card-footer">
+                                <small class="file-hint">支持 .txt 格式文件</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 公文生成工作区 -->
+                <div class="generation-workspace" id="generationWorkspace" style="display: none;">
+                    <div class="workspace-header">
+                        <button class="back-button" id="backToSelection">
+                            <i class="fas fa-arrow-left"></i>
+                            返回
+                        </button>
+                        <h2><i class="fas fa-magic"></i> 公文生成</h2>
+                    </div>
+                    
+                    <div class="generation-panel-new">
+                        <!-- 左侧：公文类型选择面板 -->
+                        <div class="left-panel">
+                            <div class="type-selection-panel">
+                                <h3><i class="fas fa-file-alt"></i> 选择公文类型</h3>
+                                <div class="type-grid">
+                                    <div class="type-card" data-type="notice">
+                                        <div class="type-icon">
+                                            <i class="fas fa-bullhorn"></i>
+                                        </div>
+                                        <div class="type-name">通知</div>
+                                    </div>
+                                    <div class="type-card" data-type="request">
+                                        <div class="type-icon">
+                                            <i class="fas fa-question-circle"></i>
+                                        </div>
+                                        <div class="type-name">请示</div>
+                                    </div>
+                                    <div class="type-card" data-type="report">
+                                        <div class="type-icon">
+                                            <i class="fas fa-chart-line"></i>
+                                        </div>
+                                        <div class="type-name">报告</div>
+                                    </div>
+                                    <div class="type-card" data-type="meeting">
+                                        <div class="type-icon">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                        <div class="type-name">会议纪要</div>
+                                    </div>
+                                    <div class="type-card" data-type="reply">
+                                        <div class="type-icon">
+                                            <i class="fas fa-reply"></i>
+                                        </div>
+                                        <div class="type-name">批复</div>
+                                    </div>
+                                    <div class="type-card" data-type="custom">
+                                        <div class="type-icon">
+                                            <i class="fas fa-cog"></i>
+                                        </div>
+                                        <div class="type-name">自定义</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 右侧：整合的表单和模板面板 -->
+                        <div class="right-panel">
+                            <div class="integrated-panel">
+                                <!-- 表单区域 -->
+                                <div class="form-section">
+                                    <div class="form-header">
+                                        <h3><i class="fas fa-edit"></i> 公文信息</h3>
+                                        <button class="template-manage-btn" id="templateManageBtn">
+                                            <i class="fas fa-cog"></i>
+                                            模板管理
+                                        </button>
+                                    </div>
+                                    <div class="form-content">
+                                        <div class="form-group">
+                                            <label for="documentTitle">文档标题</label>
+                                            <input type="text" id="documentTitle" placeholder="请输入公文标题" value="">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="recipientUnit">收文单位</label>
+                                            <input type="text" id="recipientUnit" placeholder="请输入收文单位" value="">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="senderUnit">发文单位</label>
+                                            <input type="text" id="senderUnit" placeholder="请输入发文单位" value="">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="documentContent">内容描述</label>
+                                            <textarea id="documentContent" placeholder="请详细描述公文的主要内容、要求等信息" rows="4"></textarea>
+                                        </div>
+                                        <div class="form-actions">
+                                            <button class="generate-btn" id="generateBtn">
+                                                <i class="fas fa-magic"></i>
+                                                生成公文
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 文档编辑器界面 -->
+                            <div class="document-editor" id="documentEditor" style="display: none;">
+                                <!-- 编辑器工具栏 -->
+                                <div class="editor-toolbar">
+                                    <div class="toolbar-left">
+                                        <div class="document-title-editor">
+                                            <input type="text" id="editorDocumentTitle" placeholder="文档标题" class="title-input">
+                                        </div>
+                                        <div class="document-status">
+                                            <span class="status-indicator" id="saveStatus">
+                                                <i class="fas fa-circle"></i> 已保存
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="toolbar-right">
+                                        <button class="toolbar-btn" id="undoBtn" title="撤销 (Ctrl+Z)">
+                                            <i class="fas fa-undo"></i>
+                                        </button>
+                                        <button class="toolbar-btn" id="redoBtn" title="重做 (Ctrl+Y)">
+                                            <i class="fas fa-redo"></i>
+                                        </button>
+                                        <div class="toolbar-separator"></div>
+                                        <button class="toolbar-btn" id="saveDocumentBtn" title="保存 (Ctrl+S)">
+                                            <i class="fas fa-save"></i>
+                                            <span>保存</span>
+                                        </button>
+                                        <button class="toolbar-btn proofreading-btn" id="goToProofreadBtn" title="转到润色">
+                                            <i class="fas fa-magic"></i>
+                                            <span>转到润色</span>
+                                        </button>
+                                        <button class="toolbar-btn" id="downloadDocBtn" title="下载文档">
+                                            <i class="fas fa-download"></i>
+                                            <span>下载</span>
+                                        </button>
+                                        <div class="toolbar-separator"></div>
+                                        <button class="toolbar-btn close-btn" id="closeEditorBtn" title="关闭编辑器">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- 编辑器主体 -->
+                                <div class="editor-body">
+                                    <div class="editor-container">
+                                        <textarea 
+                                            id="documentTextEditor" 
+                                            class="document-textarea"
+                                            placeholder="开始编辑您的文档...">
+                                        </textarea>
+                                    </div>
+                                    
+                                    <!-- 编辑器侧边栏 -->
+                                    <div class="editor-sidebar" id="editorSidebar">
+                                        <div class="sidebar-header">
+                                            <h4><i class="fas fa-info-circle"></i> 文档信息</h4>
+                                            <button class="sidebar-toggle" id="sidebarToggle">
+                                                <i class="fas fa-chevron-right"></i>
+                                            </button>
+                                        </div>
+                                        <div class="sidebar-content">
+                                            <div class="info-item">
+                                                <label>字数统计</label>
+                                                <span id="wordCount">0 字</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <label>创建时间</label>
+                                                <span id="createTime">-</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <label>最后修改</label>
+                                                <span id="lastModified">-</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <label>文档类型</label>
+                                                <span id="documentType">-</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 加载动画 -->
+                            <div class="preview-loading" id="previewLoading" style="display: none;">
+                                <div class="loading-spinner-large"></div>
+                                <h3 class="loading-title">AI公文生成中</h3>
+                                <p class="loading-description">正在使用大语言模型生成公文内容，请稍候...</p>
+                                <div class="loading-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill"></div>
+                                    </div>
+                                    <div class="progress-text">正在分析公文类型和内容要求...</div>
+                                </div>
+                                <div class="loading-tips">
+                                    <div class="tip-item">
+                                        <i class="fas fa-lightbulb"></i>
+                                        <span>AI正在理解您的公文需求</span>
+                                    </div>
+                                    <div class="tip-item">
+                                        <i class="fas fa-cogs"></i>
+                                        <span>正在生成符合规范的公文内容</span>
+                                    </div>
+                                    <div class="tip-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>即将完成，请耐心等待</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 模板管理模态窗口 -->
+                <div class="template-modal" id="templateModal" style="display: none;">
+                    <div class="template-modal-content">
+                        <div class="template-modal-header">
+                            <h3><i class="fas fa-file-alt"></i> 模板编辑</h3>
+                            <div class="template-modal-controls">
+                                <button class="template-action-btn" id="useTemplateBtn">
+                                    <i class="fas fa-check"></i> 使用模板
+                                </button>
+                                <button class="template-action-btn" id="editTemplateBtn">
+                                    <i class="fas fa-edit"></i> 编辑模板
+                                </button>
+                                <button class="template-action-btn" id="saveTemplateBtn">
+                                    <i class="fas fa-save"></i> 保存模板
+                                </button>
+                                <button class="template-action-btn" id="resetTemplateBtn">
+                                    <i class="fas fa-undo"></i> 恢复默认
+                                </button>
+                                <button class="close-modal-btn" id="closeTemplateModal">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="template-modal-body">
+                            <div class="template-content" id="templateContent">
+                                <p class="template-placeholder">请先选择公文类型查看模板内容</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 文档润色工作区 -->
+                <div class="proofreading-workspace" id="proofreadingWorkspace" style="display: none;">
+                    <div class="workspace-header">
+                        <button class="back-button" id="backToSelectionFromProofreading">
+                            <i class="fas fa-arrow-left"></i>
+                            返回
+                        </button>
+                        <h2><i class="fas fa-feather-alt"></i> 智能文档润色</h2>
+                    </div>
+                    
+                    <div class="proofreading-layout">
+                        <!-- 左侧导航区域 -->
+                        <div class="proofreading-sidebar">
+                            <div class="sidebar-header">
+                                <h3><i class="fas fa-upload"></i> 选择方式</h3>
+                            </div>
+                            <div class="sidebar-nav">
+                                <button class="nav-item active" data-method="upload">
+                                    <div class="nav-icon">
+                                        <i class="fas fa-file-upload"></i>
+                                    </div>
+                                    <div class="nav-content">
+                                        <span class="nav-title">上传文件</span>
+                                        <small class="nav-desc">支持 .txt 格式</small>
+                                    </div>
+                                </button>
+                                <button class="nav-item" data-method="paste">
+                                    <div class="nav-icon">
+                                        <i class="fas fa-paste"></i>
+                                    </div>
+                                    <div class="nav-content">
+                                        <span class="nav-title">直接粘贴</span>
+                                        <small class="nav-desc">复制文本内容</small>
+                                    </div>
+                                </button>
+                                <button class="nav-item" data-method="history">
+                                    <div class="nav-icon">
+                                        <i class="fas fa-history"></i>
+                                    </div>
+                                    <div class="nav-content">
+                                        <span class="nav-title">历史文档</span>
+                                        <small class="nav-desc">已保存的文档</small>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 右侧内容区域 -->
+                        <div class="proofreading-content">
+                            <!-- 文件上传区域 -->
+                            <div class="content-panel" id="uploadContent">
+                                <div class="panel-header">
+                                    <h4><i class="fas fa-file-upload"></i> 上传文件</h4>
+                                    <p>将您的文档文件上传到系统进行智能润色</p>
+                                </div>
+                                <div class="upload-zone" id="uploadArea">
+                                    <div class="upload-visual">
+                                        <div class="upload-icon-container">
+                                            <i class="fas fa-cloud-upload-alt"></i>
+                                        </div>
+                                        <h5>拖拽文件到此处</h5>
+                                        <p>或点击下方按钮选择文件</p>
+                                        <div class="upload-specs">
+                                            <span><i class="fas fa-check"></i> .txt 格式</span>
+                                            <span><i class="fas fa-check"></i> &lt; 10MB</span>
+                                        </div>
+                                    </div>
+                                    <button class="upload-btn" id="selectFileBtn">
+                                        <i class="fas fa-folder-open"></i>
+                                        选择文件
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- 直接粘贴区域 -->
+                            <div class="content-panel" id="pasteContent" style="display: none;">
+                                <div class="panel-header">
+                                    <h4><i class="fas fa-paste"></i> 直接粘贴</h4>
+                                    <p>将您的文档内容直接粘贴到下方文本框</p>
+                                </div>
+                                <div class="paste-zone">
+                                    <textarea id="pasteTextarea" class="paste-textarea" placeholder="在此粘贴您的文档内容...
+
+支持公文、报告、通知等各类文档
+AI将智能识别语法错误、错别字和表达问题"></textarea>
+                                    <div class="paste-actions">
+                                        <div class="paste-stats">
+                                            <span id="pasteCharCount">0 字符</span>
+                                            <span id="pasteWordCount">0 段落</span>
+                                        </div>
+                                        <button class="action-btn primary" id="startPasteProofreading">
+                                            <i class="fas fa-feather-alt"></i>
+                                            开始润色
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 历史文档区域 -->
+                            <div class="content-panel" id="historyContent" style="display: none;">
+                                <div class="panel-header">
+                                    <h4><i class="fas fa-history"></i> 历史文档</h4>
+                                    <p>选择之前保存的文档进行润色处理</p>
+                                </div>
+                                <div class="history-zone">
+                                    <div class="history-list" id="historyList">
+                                        <div class="history-empty">
+                                            <i class="fas fa-inbox"></i>
+                                            <h5>暂无已保存的文档</h5>
+                                            <p>在公文生成功能中保存的文档会出现在这里</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <input type="file" id="fileInput" accept=".txt" hidden>
+                </div>
+
+                <!-- 文档显示区域 -->
+                <div class="document-section" id="documentSection" style="display: none;">
+                    <div class="document-header">
+                        <div class="header-left">
+                            <button class="back-button" id="backToSelectionFromDocument">
+                                <i class="fas fa-arrow-left"></i>
+                                返回
+                            </button>
+                            <div class="document-info">
+                                <h3 id="fileName">未命名文档</h3>
+                                <div class="document-stats">
+                                    <span id="charCount">0 字符</span>
+                                    <span id="wordCount">0 词语</span>
+                                    <span id="errorCount">0 个问题</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="document-actions">
+                            <button class="action-btn" id="checkBtn">
+                                <i class="fas fa-spell-check"></i> 开始校对
+                            </button>
+                            <button class="action-btn secondary" id="exportBtn">
+                                <i class="fas fa-download"></i> 导出文档
+                            </button>
+                            <button class="action-btn danger" id="resetBtn">
+                                <i class="fas fa-undo"></i> 重新上传
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 文档内容显示区域 -->
+                    <div class="document-content">
+                        <div class="content-wrapper">
+                            <div class="text-display" id="textDisplay">
+                                <!-- 文档内容将在这里显示 -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 状态栏 -->
+                    <div class="status-bar">
+                        <div class="status-left">
+                            <span class="status-item" id="statusText">
+                                <i class="fas fa-info-circle"></i> 准备就绪
+                            </span>
+                        </div>
+                        <div class="status-right">
+                            <span class="status-item">
+                                <i class="fas fa-clock"></i>
+                                <span id="processingTime">0ms</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧功能区域 -->
+            <div class="right-section" id="rightSection">
+                <div class="controls">
+                    <button class="control-btn" id="settingsBtn">
+                        <i class="fas fa-cog"></i>
+                        <span>设置</span>
+                    </button>
+                    <button class="control-btn" id="helpBtn">
+                        <i class="fas fa-question-circle"></i>
+                        <span>帮助</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 配置模态框 -->
+        <div class="config-modal" id="configModal" style="display: none;">
+            <div class="config-modal-content">
+                <div class="config-modal-header">
+                    <h3><i class="fas fa-cog"></i> AI 配置</h3>
+                    <button class="close-modal" id="closeModal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="config-modal-body">
+                    <!-- 个性化开关 -->
+                    <div class="personalize-toggle">
+                        <div class="toggle-info">
+                            <strong>个性化配置</strong>
+                            <small>启用后可自定义API提供商、密钥和模型参数</small>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="personalizeMode">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <!-- 配置选项（初始隐藏） -->
+                    <div id="configOptions" class="config-options" style="display: none;">
+                        <div class="config-item" id="providerSection">
+                            <label for="apiProvider">API 提供商</label>
+                            <select id="apiProvider">
+                                <option value="deepseek">DeepSeek</option>
+                                <option value="openai">OpenAI</option>
+                                <option value="custom">自定义</option>
+                            </select>
+                            <div class="config-help">
+                                <small><i class="fas fa-info-circle"></i> 选择不同的AI服务提供商</small>
+                            </div>
+                        </div>
+
+                        <div class="config-item" id="apiKeySection">
+                            <label for="apiKey">API 密钥</label>
+                            <div class="input-group">
+                                <input type="password" id="apiKey" placeholder="请输入您的API密钥">
+                                <button type="button" id="toggleKey" class="toggle-btn">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="config-help" id="apiKeyHelp">
+                                <small><i class="fas fa-info-circle"></i> 获取API密钥：<a href="https://platform.deepseek.com" target="_blank">DeepSeek Platform</a></small>
+                            </div>
+                        </div>
+
+                        <div class="config-item" id="apiUrlSection" style="display: none;">
+                            <label for="apiUrl">API 地址</label>
+                            <input type="text" id="apiUrl" placeholder="请输入自定义API地址">
+                            <div class="config-help">
+                                <small><i class="fas fa-info-circle"></i> 自定义API的完整地址，如: https://api.example.com/v1/chat/completions</small>
+                            </div>
+                        </div>
+
+                        <div class="config-item" id="modelSection">
+                            <label for="apiModel">AI 模型</label>
+                            <select id="apiModel">
+                                <option value="deepseek-chat">deepseek-chat (通用对话)</option>
+                                <option value="deepseek-reasoner">deepseek-reasoner (推理专用)</option>
+                            </select>
+                            <div class="config-help" id="modelHelp">
+                                <small><i class="fas fa-info-circle"></i> 推理模型更适合逻辑分析和复杂问题</small>
+                            </div>
+                        </div>
+
+                        <div class="config-item" id="tokensSection">
+                            <label for="maxTokens">最大回复长度</label>
+                            <input type="range" id="maxTokens" min="1000" max="8000" value="4000" step="500">
+                            <div class="range-display">
+                                <span>1000</span>
+                                <span id="tokensValue">4000</span>
+                                <span>8000</span>
+                            </div>
+                            <div class="config-help">
+                                <small><i class="fas fa-info-circle"></i> 较长的文档建议使用更高的值</small>
+                            </div>
+                        </div>
+
+                        <div class="config-item" id="temperatureSection">
+                            <label for="temperature">创造性程度 (温度)</label>
+                            <input type="range" id="temperature" min="0" max="2" value="0.7" step="0.1">
+                            <div class="range-display">
+                                <span>0.0 (保守)</span>
+                                <span id="temperatureValue">0.7</span>
+                                <span>2.0 (创新)</span>
+                            </div>
+                            <div class="config-help">
+                                <small><i class="fas fa-info-circle"></i> 较低值生成更保守的内容，较高值生成更创新的内容</small>
+                            </div>
+                        </div>
+
+                        <div class="config-item" id="topPSection">
+                            <label for="topP">核采样 (Top-P)</label>
+                            <input type="range" id="topP" min="0.1" max="1" value="0.9" step="0.1">
+                            <div class="range-display">
+                                <span>0.1</span>
+                                <span id="topPValue">0.9</span>
+                                <span>1.0</span>
+                            </div>
+                            <div class="config-help">
+                                <small><i class="fas fa-info-circle"></i> 控制词汇选择的多样性，较低值更保守，较高值更多样</small>
+                            </div>
+                        </div>
+
+                        <div class="config-item" id="frequencyPenaltySection">
+                            <label for="frequencyPenalty">重复惩罚</label>
+                            <input type="range" id="frequencyPenalty" min="0" max="2" value="0.1" step="0.1">
+                            <div class="range-display">
+                                <span>0.0</span>
+                                <span id="frequencyPenaltyValue">0.1</span>
+                                <span>2.0</span>
+                            </div>
+                            <div class="config-help">
+                                <small><i class="fas fa-info-circle"></i> 减少重复内容，较高值更有效但可能影响流畅性</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="config-modal-footer">
+                    <button class="config-btn default" id="useDefaultConfig">
+                        <i class="fas fa-magic"></i> 使用默认设置
+                    </button>
+                    <button class="config-btn secondary" id="resetConfig">
+                        <i class="fas fa-undo"></i> 重置
+                    </button>
+                    <button class="config-btn primary" id="saveConfig">
+                        <i class="fas fa-save"></i> 保存设置
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+    </div>
+
+    <!-- 加载工具模块 -->
+    <script src="public/assets/js/utils/helpers.js"></script>
+    
+    <!-- 加载服务模块 -->
+    <script src="public/assets/js/services/ConfigService.js"></script>
+    <script src="public/assets/js/services/AIService.js"></script>
+    
+    <!-- 加载组件模块 -->
+    <script src="public/assets/js/components/DocumentGeneration.js"></script>
+    
+    <!-- 加载核心模块 -->
+    <script src="public/assets/js/core/DocumentAssistant.js"></script>
+    
+    <!-- 加载主应用程序 -->
+    <script src="public/assets/js/app.js"></script>
+</body>
+</html>
